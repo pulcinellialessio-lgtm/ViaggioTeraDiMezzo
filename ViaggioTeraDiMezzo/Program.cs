@@ -6,7 +6,7 @@ namespace ViaggioControBowser
 {
     internal class Program
     {
-        static void INTRO(string personaggi) //Introduzione al gioco
+        static void INTRO(ref string personaggi) //Introduzione al gioco
         {
             Console.WriteLine("SUPER MARIO ODYSSEY");
 
@@ -30,30 +30,30 @@ namespace ViaggioControBowser
 
             if (personaggi == "Mario")
             {
-                Vita = 10;
-                Attacco = 2;
+                Vita = 50;
+                Attacco = 5;
                 Console.WriteLine("Hai scelto Mario come protagonista!");
             }
             else if (personaggi == "Luigi")
             {
-                Vita = 6;
-                Attacco = 4;
+                Vita = 40;
+                Attacco = 8;
                 Console.WriteLine("Hai scelto Luigi come protagonista!");
             }
 
-            INTRO(personaggi);
+            INTRO(ref personaggi);
 
             Console.WriteLine("Sei nei panni di " + personaggi + ", devi riuscire ad arrivare alla fortezza di Bowser (Bowser's kingdom) e salvare la principessa Peach. Qusto viaggio non sarà facile, ci saranno imprevisti nel mezzo del viaggio che potranno cambiare le sorti dell'avventura, ad accompagnarti c'è cappy, un'alleato di mario che permette a lui di possedere personaggi, nemici e oggetti. Quindi detto ciò buona fortuna...");
 
             return personaggi;
         }
-        static int TurnoDiGioco(int Vita, int Attacco, string personaggi, int PozioneCura, int cavalcatura, int fioreDiFuoco, string[] Mappa) //Menu delle azioni
+        static int TurnoDiGioco(ref int Vita, ref int Attacco, ref string personaggi, ref int PozioneCura, ref int cavalcatura, ref int fioreDiFuoco, ref string[] Mappa) //Menu delle azioni
         {
             Console.WriteLine(" -------------------------------------");
             Console.WriteLine("|   Cosa vuoi fare?                   |");
             Console.WriteLine("|   1. Avanza                         |");
-            Console.WriteLine("|   2. Mostra stutus di Mario         |");
-            Console.WriteLine("|   3. Mostra inventario di Mario     |");
+            Console.WriteLine("|   2. Mostra stutus di " + personaggi + "         |");
+            Console.WriteLine("|   3. Mostra inventario di " + personaggi + "     |");
             Console.WriteLine("|   4. Usa oggetto                    |");
             Console.WriteLine("|   5. Esci dal gioco                 |");
             Console.WriteLine(" -------------------------------------");
@@ -62,50 +62,66 @@ namespace ViaggioControBowser
 
             return scelta;
         }
-        static void InventarioPersonaggio(int PozioneCura, int cavalcatura, int fioreDiFuoco) //Mostra l'inventario
+        static int[] InventarioPersonaggio() //Mostra l'inventario
         {
-            Console.WriteLine(" ---------------------------");
-            Console.WriteLine("|   Inventario di Mario:    |");
-            Console.WriteLine("|   Pozione Cura: " + PozioneCura + "          |");
-            Console.WriteLine("|   Pezzi di cavalcatura: " + cavalcatura + "   |");
-            Console.WriteLine("|   Fiori di fuoco: " + fioreDiFuoco + "        |");
-            Console.WriteLine(" ---------------------------");
+            string[] Inventario = { "PozioneDiCura", "fioreDiFuoco", "SuperFungo"};
+            int[] quantita = { 0, 0, 0};
+
+            for(int i = 0; i < Inventario.Length; i++)
+            {
+                Console.Write(Inventario[i]);
+                Console.Write("    ");
+            }
+            Console.WriteLine("    ");
+            for(int i = 0; i < quantita.Length; i++)
+            {
+                Console.Write(quantita[i]);
+                Console.Write("                     ");
+            }
+
+            Console.WriteLine("");
+
+            return quantita;
         }
-        static void UsaOggetto(int PozioneCura, int Vita, int Attacco, int fioreDiFuoco, int cavalcatura) //Usa un oggetto
+        static void UsaOggetto(ref int[] quantita, ref int Vita, ref int Attacco) //Usa un oggetto
         {
-            Console.WriteLine("Quale oggetto vuoi usare?");
-            Console.WriteLine("1: Pozione Cura");
-            Console.WriteLine("2: cavalcatura");
-            Console.WriteLine("3: Fiore di fuoco");
-            int sceltaOggetto = Convert.ToInt32(Console.ReadLine());
+            Console.WriteLine("Qualeoggetto vuoi usare?");
+            InventarioPersonaggio();
+            string oggetto = Console.ReadLine();
 
-            if (sceltaOggetto == 1)
+            if (oggetto == "PozioneDiCura" && quantita[0] > 0)
             {
-                if (PozioneCura > 0)
-                {
-                    Vita = Vita + 5;
-                    PozioneCura--;
-                    Console.WriteLine("Hai usato una Pozione Cura, la tua vita è aumentata di 5 punti!");
-                }
-                else
-                {
-                    Console.WriteLine("Non hai Pozioni Cura nell'inventario!");
-                }
+                Console.WriteLine("Hai usato una Pozione di Cura!");
+                Vita = Vita + 5;
+                quantita[0]--;
             }
-            else if (sceltaOggetto == 2 && cavalcatura >= 2)
+            else if(oggetto == "PozioneDiCura" && quantita[0] == 0)
             {
-                Console.WriteLine("Hai usato una cavalcatura, questa ti permette di avanzare più velocemente tra i vari mondi.");
-                cavalcatura = cavalcatura - 2;
+                Console.WriteLine("Non hai Pozioni di Cura nell'inventario!");
             }
-            else if (sceltaOggetto == 3 && fioreDiFuoco > 0)
+            else if(oggetto == "fioreDiFuoco" && quantita[1] > 0)
             {
-                Console.WriteLine("Hai usato un Fiore di fuoco!");
-                Attacco = Attacco + 3;
-                fioreDiFuoco--;
-
+                Console.WriteLine("Hai usato un Fiore di Fuoco!");
+                Attacco = Attacco + 5;
+                quantita[1]--;
+            }
+            else if (oggetto == "fioreDiFuoco" && quantita[1] == 0)
+            {
+                Console.WriteLine("Non hai Fiori di Fuoco nell'inventario!");
+            }
+            else if (oggetto == "SuperFungo" && quantita[2] > 0)
+            {
+                Console.WriteLine("Hai usato un Super Fungo!");
+                Vita = Vita + 10;
+                Attacco = Attacco + 2;
+                quantita[2]--;
+            }
+            else if (oggetto == "SuperFungo" && quantita[2] == 0)
+            {
+                Console.WriteLine("Non hai Super Funghi nell'inventario!");
             }
         }
-        static void StatusPersonaggio(int Vita, int Attacco, string personaggi) //Mostra lo status di mario
+        static void StatusPersonaggio(ref int Vita, ref int Attacco, ref string personaggi) //Mostra lo status di mario
         {
             Console.WriteLine(" ---------------------------");
             Console.WriteLine("|   Status di " + personaggi + ":        |");
@@ -113,14 +129,14 @@ namespace ViaggioControBowser
             Console.WriteLine("|   Attacco: " + Attacco + "              |");
             Console.WriteLine(" ---------------------------");
         }
-        static void Fossilandia(string personaggi, int Vita, int Attacco, int PozioneCura, int cavalcatura, int fioreDiFuoco, string[] Mappa) //Prima tappa del viaggio
+        static void Fossilandia(ref string personaggi, ref int Vita, ref int Attacco, ref string[] Mappa, ref int[] quantita) //regno di fossilandia
         {
             string[] Fossilandia = { "Dinosauro", "ChainComp", "MadameBrode" };
 
             Random rand = new Random();
             Random Fuga = new Random();
 
-            int DinosauroVita = 5, DinosauroAttacco = 2, ChainChompVita = 3, ChainChompAttacco = 1, MadameBroodeVita = 8, MadameBroodeAttacco = 2, p = 0, l = 0;
+            int DinosauroVita = 20, DinosauroAttacco = 2, ChainChompVita = 15, ChainChompAttacco = 1, MadameBroodeVita = 25, MadameBroodeAttacco = 3, p = 0, l = 0;
 
             for (int i = 0; i < Fossilandia.Length; i++)
             {
@@ -133,7 +149,7 @@ namespace ViaggioControBowser
                     Console.WriteLine(" 2: Fuggire via dalla via di fuga senza prendere rischi ");
                     string scelta = Console.ReadLine();
 
-                    if (scelta == "1")
+                    if (scelta == "1")//affronto dinosauro
                     {
                         Console.WriteLine("Hai deciso di affrontare il Dinosauro!");
 
@@ -147,7 +163,7 @@ namespace ViaggioControBowser
                                 Console.WriteLine("Non sei riuscito ad attaccare il dinosauro, ora lui ti ha attaccato e ti ha inflitto " + DinosauroAttacco + " danni! Premi un tasto per continuare...");
                                 Console.ReadLine();
                                 Vita -= DinosauroAttacco;
-                                StatusPersonaggio(Vita, Attacco, personaggi);
+                                StatusPersonaggio(ref Vita, ref Attacco, ref personaggi);
                                 Console.WriteLine("La vita del dinosauro è: " + DinosauroVita);
 
                                 if (Vita <= 0)
@@ -162,7 +178,7 @@ namespace ViaggioControBowser
                                 Console.WriteLine("Sei riuscito ad attaccare il dinosauro, gli hai inflitto " + Attacco + " danni! Premi un tato per continuare...");
                                 Console.ReadLine();
                                 DinosauroVita -= Attacco;
-                                StatusPersonaggio(Vita, Attacco, personaggi);
+                                StatusPersonaggio(ref Vita, ref Attacco, ref personaggi);
                                 Console.WriteLine("La vita del dinosauro è: " + DinosauroVita);
 
                                 if (Vita <= 0)
@@ -175,7 +191,7 @@ namespace ViaggioControBowser
 
                         Console.WriteLine("Sei riuscito a stordire il dinosauro! Come ricompensa per la tua vittoria, ottieni una Pozione Cura!");
 
-                        PozioneCura++;
+                        quantita[0]++;
 
                         Console.WriteLine("Ora che il dinosauro è stordito puoi usare cappy per possederlo e riuscire a distruggere ed oltrepassare il muro di roccia che ti ostacola");
                         p++;
@@ -209,7 +225,7 @@ namespace ViaggioControBowser
                                     Console.WriteLine("Non sei riuscito ad attaccare il dinosauro, ora lui ti ha attaccato e ti ha inflitto " + DinosauroAttacco + " danni! Premi un tasto per continuare...");
                                     Console.ReadLine();
                                     Vita -= DinosauroAttacco;
-                                    StatusPersonaggio(Vita, Attacco, personaggi);
+                                    StatusPersonaggio(ref Vita, ref Attacco, ref personaggi);
                                     Console.WriteLine("La vita del dinosauro è: " + DinosauroVita);
 
                                     if (Vita <= 0)
@@ -224,7 +240,7 @@ namespace ViaggioControBowser
                                     Console.WriteLine("Sei riuscito ad attaccare il dinosauro, gli hai inflitto " + Attacco + " danni! Premi un tasto per continuare...");
                                     Console.ReadLine();
                                     DinosauroVita -= Attacco;
-                                    StatusPersonaggio(Vita, Attacco, personaggi);
+                                    StatusPersonaggio(ref Vita, ref Attacco, ref personaggi);
                                     Console.WriteLine("La vita del dinosauro è: " + DinosauroVita);
 
                                     if (Vita <= 0)
@@ -237,7 +253,7 @@ namespace ViaggioControBowser
 
                             Console.WriteLine("Sei riuscito a stordire il dinosauro! Come ricompensa per la tua vittoria, ottieni una Pozione Cura!");
 
-                            PozioneCura++;
+                            quantita[0]++;
 
                             Console.WriteLine("Ora che il dinosauro è stordito puoi usare cappy per possederlo e riuscire a distruggere ed oltrepassare il muro di roccia che ti ostacola");
                         }
@@ -272,20 +288,8 @@ namespace ViaggioControBowser
                                     Console.WriteLine("Non sei riuscito ad attaccare Chain Chomp, ora lui ti ha attaccato e ti ha inflitto " + DinosauroAttacco + " danni! Premi un tasto per continuare...");
                                     Console.ReadLine();
                                     Vita -= ChainChompAttacco;
-                                    StatusPersonaggio(Vita, Attacco, personaggi);
+                                    StatusPersonaggio(ref Vita, ref Attacco, ref personaggi);
                                     Console.WriteLine("La vita del ChainChomp è: " + ChainChompVita);
-
-                                    if (PozioneCura > 0 && Vita <= 4)
-                                    {
-                                        Console.WriteLine("Vuoi usare una pozione di cura per recuperare 5 punti vita? (si/no)");
-                                        string sceltaPozione = Console.ReadLine();
-                                        if (sceltaPozione == "si")
-                                        {
-                                            Vita += 5;
-                                            PozioneCura--;
-                                            Console.WriteLine("Hai usato una pozione di cura! La tua vita ora è: " + Vita);
-                                        }
-                                    }
 
                                     if (Vita <= 0)
                                     {
@@ -299,20 +303,8 @@ namespace ViaggioControBowser
                                     Console.WriteLine("Sei riuscito ad attaccare Chain Chomp, gli hai inflitto " + Attacco + " danni! Premi un tato per continuare...");
                                     Console.ReadLine();
                                     ChainChompVita -= Attacco;
-                                    StatusPersonaggio(Vita, Attacco, personaggi);
+                                    StatusPersonaggio(ref Vita, ref Attacco, ref personaggi);
                                     Console.WriteLine("La vita del ChainChomp è: " + ChainChompVita);
-
-                                    if (PozioneCura > 0 && Vita <= 4)
-                                    {
-                                        Console.WriteLine("Vuoi usare una pozione di cura per recuperare 5 punti vita? (si/no)");
-                                        string sceltaPozione = Console.ReadLine();
-                                        if (sceltaPozione == "si")
-                                        {
-                                            Vita += 5;
-                                            PozioneCura--;
-                                            Console.WriteLine("Hai usato una pozione di cura! La tua vita ora è: " + Vita);
-                                        }
-                                    }
 
                                     if (Vita <= 0)
                                     {
@@ -322,10 +314,9 @@ namespace ViaggioControBowser
                                 }
                             }
 
-                            Console.WriteLine("Sei riuscito a sconfiggere Chain Chomp! Come ricompensa per la tua vittoria, ottieni un pezzo di cavalcatura!");
-                            cavalcatura++;
+                            Console.WriteLine("Sei riuscito a sconfiggere Chain Chomp! Come ricompensa per la tua vittoria, ottieni una Pozione di cura");
+                            quantita[0]++;
                         }
-
                     }
                     else if (l > 0)
                     {
@@ -341,20 +332,8 @@ namespace ViaggioControBowser
                                 Console.WriteLine("Non sei riuscito ad attaccare il ChainChomp, ora lui ti ha attaccato e ti ha inflitto " + ChainChompAttacco + " danni! Premi un tasto per continuare...");
                                 Console.ReadLine();
                                 Vita -= ChainChompAttacco;
-                                StatusPersonaggio(Vita, Attacco, personaggi);
+                                StatusPersonaggio(ref Vita, ref Attacco, ref personaggi);
                                 Console.WriteLine("La vita del ChainChomp è: " + ChainChompVita);
-
-                                if (PozioneCura > 0 && Vita <= 4)
-                                {
-                                    Console.WriteLine("Vuoi usare una pozione di cura per recuperare 5 punti vita? (si/no)");
-                                    string sceltaPozione = Console.ReadLine();
-                                    if (sceltaPozione == "si")
-                                    {
-                                        Vita += 5;
-                                        PozioneCura--;
-                                        Console.WriteLine("Hai usato una pozione di cura! La tua vita ora è: " + Vita);
-                                    }
-                                }
 
                                 if (Vita <= 0)
                                 {
@@ -368,20 +347,8 @@ namespace ViaggioControBowser
                                 Console.WriteLine("Sei riuscito ad attaccare il ChainChomp, gli hai inflitto " + Attacco + " danni! Premi un tato per continuare...");
                                 Console.ReadLine();
                                 ChainChompVita -= Attacco;
-                                StatusPersonaggio(Vita, Attacco, personaggi);
+                                StatusPersonaggio(ref Vita, ref Attacco, ref personaggi);
                                 Console.WriteLine("La vita del ChainChomp è: " + ChainChompVita);
-
-                                if (PozioneCura > 0 && Vita <= 4)
-                                {
-                                    Console.WriteLine("Vuoi usare una pozione di cura per recuperare 5 punti vita? (si/no)");
-                                    string sceltaPozione = Console.ReadLine();
-                                    if (sceltaPozione == "si")
-                                    {
-                                        Vita += 5;
-                                        PozioneCura--;
-                                        Console.WriteLine("Hai usato una pozione di cura! La tua vita ora è: " + Vita);
-                                    }
-                                }
 
                                 if (Vita <= 0)
                                 {
@@ -390,6 +357,8 @@ namespace ViaggioControBowser
                                 }
                             }
                         }
+                        Console.WriteLine("Sei riuscito a sconfiggere Chain Chomp! Come ricompensa per la tua vittoria, ottieni una Pozione di cura");
+                        quantita[0]++;
                     }
                 }
                 else if (i == 2)//madamebrode
@@ -401,7 +370,7 @@ namespace ViaggioControBowser
                     {
                         int TiroDado5 = rand.Next(1, 7);
 
-                        if (TiroDado5 <= 3)
+                        if (TiroDado5 < 3)
                         {
                             while (MadameBroodeVita > 0)
                             {
@@ -409,21 +378,8 @@ namespace ViaggioControBowser
                                 Console.WriteLine("Non sei riuscito ad attaccare il MadameBroode, ora lei ti ha attaccato e ti ha inflitto " + MadameBroodeAttacco + " danni! Premi un tasto per continuare...");
                                 Console.ReadLine();
                                 Vita -= MadameBroodeAttacco;
-                                StatusPersonaggio(Vita, Attacco, personaggi);
+                                StatusPersonaggio(ref Vita, ref Attacco, ref personaggi);
                                 Console.WriteLine("La vita del MadameBroode è: " + MadameBroodeVita);
-
-                                if (PozioneCura > 0 && Vita <= 4)
-                                {
-                                    Console.WriteLine("Vuoi usare una pozione di cura per recuperare 5 punti vita? (si/no)");
-                                    string sceltaPozione = Console.ReadLine();
-                                    if (sceltaPozione == "si")
-                                    {
-                                        Vita += 5;
-                                        PozioneCura--;
-                                        Console.WriteLine("Hai usato una pozione di cura! La tua vita ora è: " + Vita);
-                                    }
-                                }
-
 
                                 if (Vita <= 0)
                                 {
@@ -441,20 +397,8 @@ namespace ViaggioControBowser
                                 Console.WriteLine("Sei riuscito ad attaccare MadameBroode, gli hai inflitto " + Attacco + " danni! Premi un tato per continuare...");
                                 Console.ReadLine();
                                 MadameBroodeVita -= Attacco;
-                                StatusPersonaggio(Vita, Attacco, personaggi);
+                                StatusPersonaggio(ref Vita, ref Attacco, ref personaggi);
                                 Console.WriteLine("La vita del MadameBroode è: " + MadameBroodeVita);
-
-                                if (PozioneCura > 0 && Vita <= 4)
-                                {
-                                    Console.WriteLine("Vuoi usare una pozione di cura per recuperare 5 punti vita? (si/no)");
-                                    string sceltaPozione = Console.ReadLine();
-                                    if (sceltaPozione == "si")
-                                    {
-                                        Vita += 5;
-                                        PozioneCura--;
-                                        Console.WriteLine("Hai usato una pozione di cura! La tua vita ora è: " + Vita);
-                                    }
-                                }
 
                                 if (Vita <= 0)
                                 {
@@ -468,10 +412,8 @@ namespace ViaggioControBowser
                     Console.WriteLine("Sei riuscito a sconfiggere MadameBroode! Come ricompensa per la tua vittoria, ottieni le chiavi della Odissey! Pronto per la partenza parti verso un nuovo mondo...");
                 }
             }
-
-            TurnoDiGioco(Vita, Attacco, personaggi, PozioneCura, cavalcatura, fioreDiFuoco, Mappa);
         }
-        static void BoscoSolitario(string personaggi, int Vita, int Attacco, int PozioneCura, int cavalcature)
+        static void BoscoSolitario(ref string personaggi, ref int Vita, ref int Attacco, ref int[] quantita)//regno del bosco solitario
         {
             Console.WriteLine("Dopo un viaggio abbastanza lungo, arrivi nel Regno del Bosco Solitario, un luogo dove la natura e la tecnologia si fondono in un modo sorprendente. Per continuare il viaggio la Odissey ha bisogno di energia, trova le tre lune di energia e potenzia la Odissey.");
             Console.WriteLine(personaggi + ": Mamma mia! Che posto! Sembra... una foresta in cui ha vissuto un robot gigante!");
@@ -483,7 +425,7 @@ namespace ViaggioControBowser
             Random rand = new Random();
             Random Fuga = new Random();
 
-            int VermeElettricoVita = 4, VermeElettricoAttacco = 1, PiranhaVita = 6, PiranhaAttacco = 1, TopperVita = 8, TopperAttacco = 2;
+            int VermeElettricoVita = 15, VermeElettricoAttacco = 2, PiranhaVita = 20, PiranhaAttacco = 1, TopperVita = 26, TopperAttacco = 3;
 
             for (int i = 0; i < BoscoSolitario.Length; i++)
             {
@@ -501,20 +443,8 @@ namespace ViaggioControBowser
                             Console.WriteLine("Non sei riuscito ad attaccare il VermeElettrico, ora lui ti ha attaccato e ti ha inflitto " + VermeElettricoAttacco + " danni! Premi un tasto per continuare...");
                             Console.ReadLine();
                             Vita -= VermeElettricoAttacco;
-                            StatusPersonaggio(Vita, Attacco, personaggi);
+                            StatusPersonaggio(ref Vita, ref Attacco, ref personaggi);
                             Console.WriteLine("La vita del VermeElettrico è: " + VermeElettricoVita);
-
-                            if (PozioneCura > 0 && Vita <= 4)
-                            {
-                                Console.WriteLine("Vuoi usare una pozione di cura per recuperare 5 punti vita? (si/no)");
-                                string sceltaPozione = Console.ReadLine();
-                                if (sceltaPozione == "si")
-                                {
-                                    Vita += 5;
-                                    PozioneCura--;
-                                    Console.WriteLine("Hai usato una pozione di cura! La tua vita ora è: " + Vita);
-                                }
-                            }
 
                             if (Vita <= 0)
                             {
@@ -528,20 +458,8 @@ namespace ViaggioControBowser
                             Console.WriteLine("Sei riuscito ad attaccare il VermeElettrico, gli hai inflitto " + Attacco + " danni! Premi un tato per continuare...");
                             Console.ReadLine();
                             VermeElettricoVita -= Attacco;
-                            StatusPersonaggio(Vita, Attacco, personaggi);
+                            StatusPersonaggio(ref Vita, ref Attacco, ref personaggi);
                             Console.WriteLine("La vita del VermeElettrico è: " + VermeElettricoVita);
-
-                            if (PozioneCura > 0 && Vita <= 4)
-                            {
-                                Console.WriteLine("Vuoi usare una pozione di cura per recuperare 5 punti vita? (si/no)");
-                                string sceltaPozione = Console.ReadLine();
-                                if (sceltaPozione == "si")
-                                {
-                                    Vita += 5;
-                                    PozioneCura--;
-                                    Console.WriteLine("Hai usato una pozione di cura! La tua vita ora è: " + Vita);
-                                }
-                            }
 
                             if (Vita <= 0)
                             {
@@ -551,9 +469,8 @@ namespace ViaggioControBowser
                         }
                     }
 
-                    Console.WriteLine("Sei riuscito a stordire il VermeElettrico! Come ricompensa per la tua vittoria, ottieni una Pozione Cura!");
-
-                    PozioneCura++;
+                    Console.WriteLine("Sei riuscito a stordire il VermeElettrico! Come ricompensa per la tua vittoria, ottieni un fiore di fuoco");
+                    quantita[1]++;
                 }
                 else if (i == 1)//Piranha
                 {
@@ -577,20 +494,8 @@ namespace ViaggioControBowser
                                 Console.WriteLine("Non sei riuscito ad attaccare il Piranha, ora lui ti ha attaccato e ti ha inflitto " + PiranhaAttacco + " danni! Premi un tasto per continuare...");
                                 Console.ReadLine();
                                 Vita -= PiranhaAttacco;
-                                StatusPersonaggio(Vita, Attacco, personaggi);
+                                StatusPersonaggio(ref Vita, ref Attacco, ref personaggi);
                                 Console.WriteLine("La vita di Piranha è: " + PiranhaVita);
-
-                                if (PozioneCura > 0 && Vita <= 4)
-                                {
-                                    Console.WriteLine("Vuoi usare una pozione di cura per recuperare 5 punti vita? (si/no)");
-                                    string sceltaPozione = Console.ReadLine();
-                                    if (sceltaPozione == "si")
-                                    {
-                                        Vita += 5;
-                                        PozioneCura--;
-                                        Console.WriteLine("Hai usato una pozione di cura! La tua vita ora è: " + Vita);
-                                    }
-                                }
 
                                 if (Vita <= 0)
                                 {
@@ -604,20 +509,8 @@ namespace ViaggioControBowser
                                 Console.WriteLine("Sei riuscito ad attaccare il Piranha, gli hai inflitto " + Attacco + " danni! Premi un tato per continuare...");
                                 Console.ReadLine();
                                 PiranhaVita -= Attacco;
-                                StatusPersonaggio(Vita, Attacco, personaggi);
+                                StatusPersonaggio(ref Vita, ref Attacco, ref personaggi);
                                 Console.WriteLine("La vita del Piranha è: " + PiranhaVita);
-
-                                if (PozioneCura > 0 && Vita <= 4)
-                                {
-                                    Console.WriteLine("Vuoi usare una pozione di cura per recuperare 5 punti vita? (si/no)");
-                                    string sceltaPozione = Console.ReadLine();
-                                    if (sceltaPozione == "si")
-                                    {
-                                        Vita += 5;
-                                        PozioneCura--;
-                                        Console.WriteLine("Hai usato una pozione di cura! La tua vita ora è: " + Vita);
-                                    }
-                                }
 
                                 if (Vita <= 0)
                                 {
@@ -627,9 +520,9 @@ namespace ViaggioControBowser
                             }
                         }
 
-                        Console.WriteLine("Sei riuscito a stordire il Piranha! Come ricompensa per la tua vittoria, ottieni l'altra metà di cavalcatura, questa ti permette di poter viaggiare piu velocemente tra i vari mondi aumentando di 1 il valore del dado.");
+                        Console.WriteLine("Sei riuscito a stordire il Piranha! Come ricompensa per la tua vittoria, ottieni una pozione di cura, questa ti permette di poter viaggiare piu velocemente tra i vari mondi aumentando di 1 il valore del dado.");
 
-                        cavalcature++;
+                        quantita[0]++;
 
                         Console.WriteLine("Ora che il Piranha è stordito puoi continuare il tuo viaggio alla ricerca delle lune.");
                     }
@@ -661,20 +554,8 @@ namespace ViaggioControBowser
                                     Console.WriteLine("Non sei riuscito ad attaccare il Piranha, ora lui ti ha attaccato e ti ha inflitto " + PiranhaAttacco + " danni! Premi un tasto per continuare...");
                                     Console.ReadLine();
                                     Vita -= PiranhaAttacco;
-                                    StatusPersonaggio(Vita, Attacco, personaggi);
+                                    StatusPersonaggio(ref Vita, ref Attacco, ref personaggi);
                                     Console.WriteLine("La vita del Piranha è: " + PiranhaVita);
-
-                                    if (PozioneCura > 0 && Vita <= 4)
-                                    {
-                                        Console.WriteLine("Vuoi usare una pozione di cura per recuperare 5 punti vita? (si/no)");
-                                        string sceltaPozione = Console.ReadLine();
-                                        if (sceltaPozione == "si")
-                                        {
-                                            Vita += 5;
-                                            PozioneCura--;
-                                            Console.WriteLine("Hai usato una pozione di cura! La tua vita ora è: " + Vita);
-                                        }
-                                    }
 
                                     if (Vita <= 0)
                                     {
@@ -688,20 +569,8 @@ namespace ViaggioControBowser
                                     Console.WriteLine("Sei riuscito ad attaccare il Piranha, gli hai inflitto " + Attacco + " danni! Premi un tasto per continuare...");
                                     Console.ReadLine();
                                     PiranhaVita -= Attacco;
-                                    StatusPersonaggio(Vita, Attacco, personaggi);
+                                    StatusPersonaggio(ref Vita, ref Attacco, ref personaggi);
                                     Console.WriteLine("La vita di Piranha è: " + PiranhaVita);
-
-                                    if (PozioneCura > 0 && Vita <= 4)
-                                    {
-                                        Console.WriteLine("Vuoi usare una pozione di cura per recuperare 5 punti vita? (si/no)");
-                                        string sceltaPozione = Console.ReadLine();
-                                        if (sceltaPozione == "si")
-                                        {
-                                            Vita += 5;
-                                            PozioneCura--;
-                                            Console.WriteLine("Hai usato una pozione di cura! La tua vita ora è: " + Vita);
-                                        }
-                                    }
 
                                     if (Vita <= 0)
                                     {
@@ -711,9 +580,9 @@ namespace ViaggioControBowser
                                 }
                             }
 
-                            Console.WriteLine("Sei riuscito a stordire il Piranha! Come ricompensa per la tua vittoria, ottieni l'altra metà di cavalcatura, questa ti permette di poter viaggiare piu velocemente tra i vari mondi aumentando di 1 il valore del dado.");
+                            Console.WriteLine("Sei riuscito a stordire il Piranha! Come ricompensa per la tua vittoria, ottieni un fiore di fuoco, questa ti permette di poter viaggiare piu velocemente tra i vari mondi aumentando di 1 il valore del dado.");
 
-                            cavalcature++;
+                            quantita[1]++;
 
                             Console.WriteLine("Ora che il Piranha è stordito puoi continuare il tuo viaggio alla ricerca delle lune.");
                         }
@@ -734,20 +603,8 @@ namespace ViaggioControBowser
                             Console.WriteLine("Non sei riuscito ad attaccare Topper, ora lui ti ha attaccato e ti ha inflitto " + TopperAttacco + " danni! Premi un tasto per continuare...");
                             Console.ReadLine();
                             Vita -= TopperAttacco;
-                            StatusPersonaggio(Vita, Attacco, personaggi);
+                            StatusPersonaggio(ref Vita, ref Attacco, ref personaggi);
                             Console.WriteLine("La vita di Topper è: " + TopperVita);
-
-                            if (PozioneCura > 0 && Vita <= 4)
-                            {
-                                Console.WriteLine("Vuoi usare una pozione di cura per recuperare 5 punti vita? (si/no)");
-                                string sceltaPozione = Console.ReadLine();
-                                if (sceltaPozione == "si")
-                                {
-                                    Vita += 5;
-                                    PozioneCura--;
-                                    Console.WriteLine("Hai usato una pozione di cura! La tua vita ora è: " + Vita);
-                                }
-                            }
 
                             if (Vita <= 0)
                             {
@@ -761,20 +618,8 @@ namespace ViaggioControBowser
                             Console.WriteLine("Sei riuscito ad attaccare il Topper, gli hai inflitto " + Attacco + " danni! Premi un tato per continuare...");
                             Console.ReadLine();
                             TopperVita -= Attacco;
-                            StatusPersonaggio(Vita, Attacco, personaggi);
+                            StatusPersonaggio(ref Vita, ref Attacco, ref personaggi);
                             Console.WriteLine("La vita del Topper è: " + TopperVita);
-
-                            if (PozioneCura > 0 && Vita <= 4)
-                            {
-                                Console.WriteLine("Vuoi usare una pozione di cura per recuperare 5 punti vita? (si/no)");
-                                string sceltaPozione = Console.ReadLine();
-                                if (sceltaPozione == "si")
-                                {
-                                    Vita += 5;
-                                    PozioneCura--;
-                                    Console.WriteLine("Hai usato una pozione di cura! La tua vita ora è: " + Vita);
-                                }
-                            }
 
                             if (Vita <= 0)
                             {
@@ -784,14 +629,14 @@ namespace ViaggioControBowser
                         }
                     }
 
-                    Console.WriteLine("Sei riuscito a sconfiggere Topper! Puoi andare tranquillamente a prenderere le lune di energia e tornare alla Odissey.");
+                    Console.WriteLine("Sei riuscito a sconfiggere Topper! Puoi andare tranquillamente a prenderere le lune di energia e tornare alla Odissey. Hai ottenuto un SuperFungo");
+                    quantita[2]++;
                 }
             }
-
         }
-        static void Imprevisto(int Vita, int Attacco, string personaggi, int PozioneCura)
+        static void Imprevisto(ref int Vita, ref int Attacco, ref string personaggi, ref int[] quantita)//imprevisto durante il viaggio
         {
-            int TREXVita = 6, TREXAttacco = 2, PiranhaVita = 8, PiranhaAttacco = 2;
+            int TREXVita = 10, TREXAttacco = 2, PiranhaVita = 15, PiranhaAttacco = 2;
             Console.WriteLine("Durante il viaggio verso il prossimo mondo, un'improvvisa tempesta cosmica scuote la Odissey, costringendo Mario a manovrare con abilità per evitare detriti spaziali e onde di energia instabile. Mentre la nave viene scossa, Mario si aggrappa saldamente a Cappy. Durante la tempesta la Odyssey si rompe e precipiti giu ad alte velocità, ma per fortuna l'impatto viene attutito da un gruppo di alberi. Quando esci dalla odissey ti ritrovi in un isola piena di dinosauri, la odissey è tutta a pezzi e sono sparsi su tutta l'isola. Recuperali e possiamo ripartire.");
             Console.WriteLine("Devi trovare 3 pezzi della odissey per poter ripartire, buona fortuna!");
             Console.WriteLine("Mario parte alla ricerca del primo pezzo della odissey... fino a quando non si accorge che un T-REX sta custodendo uno dei tre pezzi, prova ad avvicinarti e prenderlo senza farti vedere, se ti farai vedere dovrai combattere un duello.");
@@ -820,20 +665,8 @@ namespace ViaggioControBowser
                         Console.WriteLine("Non sei riuscito ad attaccare Topper, ora lui ti ha attaccato e ti ha inflitto " + TREXAttacco + " danni! Premi un tasto per continuare...");
                         Console.ReadLine();
                         Vita -= TREXAttacco;
-                        StatusPersonaggio(Vita, Attacco, personaggi);
+                        StatusPersonaggio(ref Vita, ref Attacco, ref personaggi);
                         Console.WriteLine("La vita di Topper è: " + TREXVita);
-
-                        if (PozioneCura > 0 && Vita <= 4)
-                        {
-                            Console.WriteLine("Vuoi usare una pozione di cura per recuperare 5 punti vita? (si/no)");
-                            string sceltaPozione = Console.ReadLine();
-                            if (sceltaPozione == "si")
-                            {
-                                Vita += 5;
-                                PozioneCura--;
-                                Console.WriteLine("Hai usato una pozione di cura! La tua vita ora è: " + Vita);
-                            }
-                        }
 
                         if (Vita <= 0)
                         {
@@ -847,20 +680,8 @@ namespace ViaggioControBowser
                         Console.WriteLine("Sei riuscito ad attaccare il Topper, gli hai inflitto " + Attacco + " danni! Premi un tato per continuare...");
                         Console.ReadLine();
                         TREXVita -= Attacco;
-                        StatusPersonaggio(Vita, Attacco, personaggi);
+                        StatusPersonaggio(ref Vita, ref Attacco, ref personaggi);
                         Console.WriteLine("La vita del Topper è: " + TREXVita);
-
-                        if (PozioneCura > 0 && Vita <= 4)
-                        {
-                            Console.WriteLine("Vuoi usare una pozione di cura per recuperare 5 punti vita? (si/no)");
-                            string sceltaPozione = Console.ReadLine();
-                            if (sceltaPozione == "si")
-                            {
-                                Vita += 5;
-                                PozioneCura--;
-                                Console.WriteLine("Hai usato una pozione di cura! La tua vita ora è: " + Vita);
-                            }
-                        }
 
                         if (Vita <= 0)
                         {
@@ -885,20 +706,8 @@ namespace ViaggioControBowser
                     Console.WriteLine("Non sei riuscito ad attaccare il Piranha, ora lui ti ha attaccato e ti ha inflitto " + PiranhaAttacco + " danni! Premi un tasto per continuare...");
                     Console.ReadLine();
                     Vita -= PiranhaAttacco;
-                    StatusPersonaggio(Vita, Attacco, personaggi);
+                    StatusPersonaggio(ref Vita, ref Attacco, ref personaggi);
                     Console.WriteLine("La vita di Piranha è: " + PiranhaVita);
-
-                    if (PozioneCura > 0 && Vita <= 4)
-                    {
-                        Console.WriteLine("Vuoi usare una pozione di cura per recuperare 5 punti vita? (si/no)");
-                        string sceltaPozione = Console.ReadLine();
-                        if (sceltaPozione == "si")
-                        {
-                            Vita += 5;
-                            PozioneCura--;
-                            Console.WriteLine("Hai usato una pozione di cura! La tua vita ora è: " + Vita);
-                        }
-                    }
 
                     if (Vita <= 0)
                     {
@@ -912,20 +721,8 @@ namespace ViaggioControBowser
                     Console.WriteLine("Sei riuscito ad attaccare il Piranha, gli hai inflitto " + Attacco + " danni! Premi un tato per continuare...");
                     Console.ReadLine();
                     PiranhaVita -= Attacco;
-                    StatusPersonaggio(Vita, Attacco, personaggi);
+                    StatusPersonaggio(ref Vita, ref Attacco, ref personaggi);
                     Console.WriteLine("La vita del Piranha è: " + PiranhaVita);
-
-                    if (PozioneCura > 0 && Vita <= 4)
-                    {
-                        Console.WriteLine("Vuoi usare una pozione di cura per recuperare 5 punti vita? (si/no)");
-                        string sceltaPozione = Console.ReadLine();
-                        if (sceltaPozione == "si")
-                        {
-                            Vita += 5;
-                            PozioneCura--;
-                            Console.WriteLine("Hai usato una pozione di cura! La tua vita ora è: " + Vita);
-                        }
-                    }
 
                     if (Vita <= 0)
                     {
@@ -938,9 +735,9 @@ namespace ViaggioControBowser
             Console.WriteLine("Sei riuscito a sconfiggere il gruppo di Piranha! Ora puoi prendere il pezzo della odissey che stavano custodendo e proseguire nella ricerca dell'ultimo pezzo.");
             Console.WriteLine("Mentre stai tornando alla odissey per ripararla, noti un bagliore tra gli alberi. Avvicinandoti, scopri che l'ultimo pezzo è rimasto tra un albero, per fortuna sei un bravo arrampicatore e quindi riesci a trovare tutti e tre i pezzi e dopo aver riparato la odissey ritorni in cammino verso il prossimo regno.");
         }
-        static void NewDonkCity(string personaggi, int Vita, int Attacco, int PozioneCura)
+        static void NewDonkCity(ref string personaggi, ref int Vita, ref int Attacco, ref int[] quantita)//regno di new donk city
         {
-            int salti = 0, HarietVita = 8, HarietAttacco = 2;
+            int salti = 0, HarietVita = 25, HarietAttacco = 3;
             Random rand = new Random();
 
             Console.WriteLine("Dopo un lungo e turbolento viaggio, arrivi nel Regno di New Donk City, una metropoli vibrante e piena di vita, ispirata alle grandi città degli anni '30. Per continuare il viaggio la Odissey ha bisogno di energia, trova le tre lune di energia e potenzia la Odissey.");
@@ -973,7 +770,7 @@ namespace ViaggioControBowser
                 }
                 Console.WriteLine("Dopo una gara intensa e piena di salti acrobatici, riesci a superare Donkey Kong e a ottenere la luna di energia! Donkey Kong, impressionato dalla tua abilità, ti consegna la luna con un sorriso amichevole e ti da anche una pozione di cura. Ora puoi continuare il tuo viaggio alla ricerca delle altre lune di energia per potenziare la Odissey.");
                 Console.WriteLine("Visto che hai vinto Donkey Kong ti dà un'indizio su dove trovare le altre lune, si trovano in cima all'Empire state building.");
-                PozioneCura++;
+                quantita[0]++;
             }
             else if (scelta == 2)
             {
@@ -993,20 +790,8 @@ namespace ViaggioControBowser
                     Console.WriteLine("Non sei riuscito ad attaccare il Hariet, ora lui ti ha attaccato e ti ha inflitto " + HarietAttacco + " danni! Premi un tasto per continuare...");
                     Console.ReadLine();
                     Vita -= HarietAttacco;
-                    StatusPersonaggio(Vita, Attacco, personaggi);
+                    StatusPersonaggio(ref Vita, ref Attacco, ref personaggi);
                     Console.WriteLine("La vita di Hariet è: " + HarietVita);
-
-                    if (PozioneCura > 0 && Vita <= 4)
-                    {
-                        Console.WriteLine("Vuoi usare una pozione di cura per recuperare 5 punti vita? (si/no)");
-                        string sceltaPozione = Console.ReadLine();
-                        if (sceltaPozione == "si")
-                        {
-                            Vita += 5;
-                            PozioneCura--;
-                            Console.WriteLine("Hai usato una pozione di cura! La tua vita ora è: " + Vita);
-                        }
-                    }
 
                     if (Vita <= 0)
                     {
@@ -1020,20 +805,8 @@ namespace ViaggioControBowser
                     Console.WriteLine("Sei riuscito ad attaccare Hariet, gli hai inflitto " + Attacco + " danni! Premi un tato per continuare...");
                     Console.ReadLine();
                     HarietVita -= Attacco;
-                    StatusPersonaggio(Vita, Attacco, personaggi);
+                    StatusPersonaggio(ref Vita, ref Attacco, ref personaggi);
                     Console.WriteLine("La vita di Hariet è: " + HarietVita);
-
-                    if (PozioneCura > 0 && Vita <= 4)
-                    {
-                        Console.WriteLine("Vuoi usare una pozione di cura per recuperare 5 punti vita? (si/no)");
-                        string sceltaPozione = Console.ReadLine();
-                        if (sceltaPozione == "si")
-                        {
-                            Vita += 5;
-                            PozioneCura--;
-                            Console.WriteLine("Hai usato una pozione di cura! La tua vita ora è: " + Vita);
-                        }
-                    }
 
                     if (Vita <= 0)
                     {
@@ -1042,16 +815,17 @@ namespace ViaggioControBowser
                     }
                 }
             }
-            Console.WriteLine("Sei riuscito a sconfiggere Hariet! Ora puoi prendere le lune di energia e tornare alla Odissey.");
+            Console.WriteLine("Sei riuscito a sconfiggere Hariet! Ora puoi prendere le lune di energia e tornare alla Odissey. Hai ottenuto un SUPER FUNGO");
+            quantita[2]++;
         }
-        static void Bruma(string personaggi, int Vita, int Attacco, int PozioneCura)
+        static void Bruma(ref string personaggi, ref int Vita, ref int Attacco, ref int[] quantita)//regno di bruma
         {
             Console.WriteLine(personaggi + " scese dalla sua Odyssey in un mondo saturo di bruma grigio-verdastra, una nebbia densa che inghiottiva la luce fioca dei neon al mercurio. L'aria era gelida, densa di un odore acre di ozono e metallo bruciato. Il paesaggio era un labirinto di ruggine e cemento, con silos e tubazioni che si perdevano nel nulla. Dominava un ronzio costante e profondo, interrotto solo dal suono amplificato dei suoi passi sull'asfalto oleoso e bagnato. In lontananza, ombre umane si muovevano lente, sagome silenziose e piegate che sembravano parte stessa della desolazione industriale di Bruma.");
             Console.WriteLine("La Odissey ha bisogno di energia, recupera le tre lune di esergia e possiamo continuare il viaggio.");
 
             Random rand = new Random();
             Random Fuga = new Random();
-            int RobotanicoTossicoVita = 6, RobotanicoTossicoAttacco = 1, SpewartVita = 8, SpewartAttacco = 2;
+            int RobotanicoTossicoVita = 15, RobotanicoTossicoAttacco = 2, SpewartVita = 25, SpewartAttacco = 3;
 
             Console.WriteLine("Lungo il tragitto incontri Robotanico Tossico, Un grande robot che pattuglia le aree industriali. Attacca rilasciando nebbia pressurizzata, creando campi elettrici. Sei circondato di nebbia ma riesci a trovare una via di fuga. Cosa scegli di fare, combatti (1) oppure tenti di fuggire (2)");
             string scelta = Console.ReadLine();
@@ -1070,7 +844,7 @@ namespace ViaggioControBowser
                         Console.WriteLine("Non sei riuscito ad attaccare RobotanicoTossico, ora lui ti ha attaccato e ti ha inflitto " + RobotanicoTossicoAttacco + " danni! Premi un tasto per continuare...");
                         Console.ReadLine();
                         Vita -= RobotanicoTossicoAttacco;
-                        StatusPersonaggio(Vita, Attacco, personaggi);
+                        StatusPersonaggio(ref Vita, ref Attacco, ref personaggi);
                         Console.WriteLine("La vita di RobotanicoTossico è: " + RobotanicoTossicoVita);
 
                         if (Vita <= 0)
@@ -1085,7 +859,7 @@ namespace ViaggioControBowser
                         Console.WriteLine("Sei riuscito ad attaccare RobotanicoTossico, gli hai inflitto " + Attacco + " danni! Premi un tato per continuare...");
                         Console.ReadLine();
                         RobotanicoTossicoVita -= Attacco;
-                        StatusPersonaggio(Vita, Attacco, personaggi);
+                        StatusPersonaggio(ref Vita, ref Attacco, ref personaggi);
                         Console.WriteLine("La vita di RobotanicoTossico è: " + RobotanicoTossicoVita);
 
                         if (Vita <= 0)
@@ -1096,9 +870,9 @@ namespace ViaggioControBowser
                     }
                 }
 
-                Console.WriteLine("Sei riuscito a stordire RobotanicoTossico! Come ricompensa per la tua vittoria, ottieni una Pozione Cura!");
+                Console.WriteLine("Sei riuscito a stordire RobotanicoTossico! Come ricompensa per la tua vittoria, ottieni un fiore di fuoco");
 
-                PozioneCura++;
+                quantita[1]++;
 
                 Console.WriteLine("Ora che RobotanicoTossico è stordito puoi usare cappy per possederlo e riuscire a sgomberare la nebbia e trovare il covo di spewart");
             }
@@ -1129,7 +903,7 @@ namespace ViaggioControBowser
                             Console.WriteLine("Non sei riuscito ad attaccare RobotanicoTossico, ora lui ti ha attaccato e ti ha inflitto " + RobotanicoTossicoAttacco + " danni! Premi un tasto per continuare...");
                             Console.ReadLine();
                             Vita -= RobotanicoTossicoAttacco;
-                            StatusPersonaggio(Vita, Attacco, personaggi);
+                            StatusPersonaggio(ref Vita, ref Attacco, ref personaggi);
                             Console.WriteLine("La vita di RobotanicoTossico è: " + RobotanicoTossicoVita);
 
                             if (Vita <= 0)
@@ -1144,7 +918,7 @@ namespace ViaggioControBowser
                             Console.WriteLine("Sei riuscito ad attaccare RobotanicoTossico, gli hai inflitto " + Attacco + " danni! Premi un tasto per continuare...");
                             Console.ReadLine();
                             RobotanicoTossicoVita -= Attacco;
-                            StatusPersonaggio(Vita, Attacco, personaggi);
+                            StatusPersonaggio(ref Vita, ref Attacco, ref personaggi);
                             Console.WriteLine("La vita di RobotanicoTossico è: " + RobotanicoTossicoVita);
 
                             if (Vita <= 0)
@@ -1155,9 +929,9 @@ namespace ViaggioControBowser
                         }
                     }
 
-                    Console.WriteLine("Sei riuscito a stordire RobotanicoTossico! Come ricompensa per la tua vittoria, ottieni una Pozione Cura!");
+                    Console.WriteLine("Sei riuscito a stordire RobotanicoTossico! Come ricompensa per la tua vittoria, ottieni un fiore di fuoco");
 
-                    PozioneCura++;
+                    quantita[1]++;
 
                     Console.WriteLine("Ora che RobotanicoTossico è stordito puoi usare cappy per possederlo e riuscire a sgomberare la nebbia e trovare il covo di spewart");
                 }
@@ -1166,7 +940,7 @@ namespace ViaggioControBowser
             Console.WriteLine("Dopo aver usato Cappy per possedere RobotanicoTossico, riesci a dissipare la nebbia tossica che avvolge Bruma. Con la visibilità finalmente ripristinata, individui il covo di Spewart, il Broodal vestito di blu che sputa veleno, nascosto tra le rovine industriali. Preparati ad affrontarlo e a recuperare le lune di energia necessarie per potenziare la Odissey e continuare il tuo viaggio.");
             Console.WriteLine("Ti avventuri nel covo di Spewart, pronto a sfidarlo. Spewart ti appare all'improvviso con un attacco, non riesci a schivarlo wuindi subisci danno.");
             Vita -= SpewartAttacco;
-            StatusPersonaggio(Vita, Attacco, personaggi);
+            StatusPersonaggio(ref Vita, ref Attacco, ref personaggi);
 
             Console.WriteLine("Il combattimento è iniziato!");
 
@@ -1180,20 +954,8 @@ namespace ViaggioControBowser
                     Console.WriteLine("Non sei riuscito ad attaccare Spewart, ora lui ti ha attaccato e ti ha inflitto " + SpewartAttacco + " danni! Premi un tasto per continuare...");
                     Console.ReadLine();
                     Vita -= SpewartAttacco;
-                    StatusPersonaggio(Vita, Attacco, personaggi);
+                    StatusPersonaggio(ref Vita, ref Attacco, ref personaggi);
                     Console.WriteLine("La vita di Spewart è: " + SpewartVita);
-
-                    if (PozioneCura > 0 && Vita <= 4)
-                    {
-                        Console.WriteLine("Vuoi usare una pozione di cura per recuperare 5 punti vita? (si/no)");
-                        string sceltaPozione = Console.ReadLine();
-                        if (sceltaPozione == "si")
-                        {
-                            Vita += 5;
-                            PozioneCura--;
-                            Console.WriteLine("Hai usato una pozione di cura! La tua vita ora è: " + Vita);
-                        }
-                    }
 
                     if (Vita <= 0)
                     {
@@ -1207,20 +969,8 @@ namespace ViaggioControBowser
                     Console.WriteLine("Sei riuscito ad attaccare Spewart, gli hai inflitto " + Attacco + " danni! Premi un tato per continuare...");
                     Console.ReadLine();
                     SpewartVita -= Attacco;
-                    StatusPersonaggio(Vita, Attacco, personaggi);
+                    StatusPersonaggio(ref Vita, ref Attacco, ref personaggi);
                     Console.WriteLine("La vita di Spewart è: " + SpewartVita);
-
-                    if (PozioneCura > 0 && Vita <= 4)
-                    {
-                        Console.WriteLine("Vuoi usare una pozione di cura per recuperare 5 punti vita? (si/no)");
-                        string sceltaPozione = Console.ReadLine();
-                        if (sceltaPozione == "si")
-                        {
-                            Vita += 5;
-                            PozioneCura--;
-                            Console.WriteLine("Hai usato una pozione di cura! La tua vita ora è: " + Vita);
-                        }
-                    }
 
                     if (Vita <= 0)
                     {
@@ -1229,11 +979,12 @@ namespace ViaggioControBowser
                     }
                 }
             }
-            Console.WriteLine("Dopo un lungo e arduo combattimento, riesci a sconfiggere Spewart! Con la sua sconfitta, ottieni le lune di energia necessarie per potenziare la Odissey. Ora puoi continuare il tuo viaggio attraverso i regni cosmici, non manca molto alla fortezza di Bowser. pronto ad affrontare nuove sfide e avventure si riparte.");
+            Console.WriteLine("Dopo un lungo e arduo combattimento, riesci a sconfiggere Spewart! Con la sua sconfitta, ottieni le lune di energia necessarie per potenziare la Odissey. Ora puoi continuare il tuo viaggio attraverso i regni cosmici, non manca molto alla fortezza di Bowser. pronto ad affrontare nuove sfide e avventure si riparte. Hai ottenuto un SUPER FUNGO");
+            quantita[2]++;
         }
-        static void Tirannia(string personaggi, int Vita, int Attacco, int PozioneCura, int fioreDiFuoco)
+        static void Tirannia(ref string personaggi, ref int Vita, ref int Attacco, ref int[] quantita)//regno della tirannia
         {
-            int GoombaVita = 6, GoombaAttacco = 1, RangoVita = 10, RangoAttacco = 2; ;
+            int GoombaVita = 10, GoombaAttacco = 2, RangoVita = 25, RangoAttacco = 3; 
             bool g = false;
             Console.WriteLine("Il viaggio verso il prossimo regno è stato tranquillo, ma all'improvviso la Odissey viene risucchiata in un vortice oscuro che la trasporta in un mondo dominato dalla tirannia di Bowser. Qui, Bowser ha instaurato un regime oppressivo, governando con pugno di ferro e schiavizzando gli abitanti del regno. Libera gli abitanti sconfiggendo il mostro che li tieni in gabbia, inserisci il codice e saranno salvi. Ah non ti dimenticare delle tre lune di energia necessarie per concludere il nostro viaggio!");
             Console.WriteLine("A tenere in gabbia gli abitanti c'è una torre di Goomba corrazzata, per liberare gli abitanti devi inserire il codice segreto che è formato da 4 numeri. Ogni numero lo ottieni sconfiggendo i goomba corrazzati che pattugliano la torre.");
@@ -1249,20 +1000,8 @@ namespace ViaggioControBowser
                     Console.WriteLine("Non sei riuscito ad attaccare Goomba, ora lui ti ha attaccato e ti ha inflitto " + GoombaAttacco + " danni! Premi un tasto per continuare...");
                     Console.ReadLine();
                     Vita -= GoombaAttacco;
-                    StatusPersonaggio(Vita, Attacco, personaggi);
+                    StatusPersonaggio(ref Vita, ref Attacco, ref personaggi);
                     Console.WriteLine("La vita di Goomba è: " + GoombaVita);
-
-                    if (PozioneCura > 0 && Vita <= 4)
-                    {
-                        Console.WriteLine("Vuoi usare una pozione di cura per recuperare 5 punti vita? (si/no)");
-                        string sceltaPozione = Console.ReadLine();
-                        if (sceltaPozione == "si")
-                        {
-                            Vita += 5;
-                            PozioneCura--;
-                            Console.WriteLine("Hai usato una pozione di cura! La tua vita ora è: " + Vita);
-                        }
-                    }
 
                     if (Vita <= 0)
                     {
@@ -1276,20 +1015,8 @@ namespace ViaggioControBowser
                     Console.WriteLine("Sei riuscito ad attaccare i Goomba, gli hai inflitto " + Attacco + " danni! Premi un tato per continuare...");
                     Console.ReadLine();
                     GoombaVita -= Attacco;
-                    StatusPersonaggio(Vita, Attacco, personaggi);
+                    StatusPersonaggio(ref Vita, ref Attacco, ref personaggi);
                     Console.WriteLine("La vita di Goomba è: " + GoombaVita);
-
-                    if (PozioneCura > 0 && Vita <= 4)
-                    {
-                        Console.WriteLine("Vuoi usare una pozione di cura per recuperare 5 punti vita? (si/no)");
-                        string sceltaPozione = Console.ReadLine();
-                        if (sceltaPozione == "si")
-                        {
-                            Vita += 5;
-                            PozioneCura--;
-                            Console.WriteLine("Hai usato una pozione di cura! La tua vita ora è: " + Vita);
-                        }
-                    }
 
                     if (Vita <= 0)
                     {
@@ -1307,7 +1034,7 @@ namespace ViaggioControBowser
                 if (codiceInserito == "4297")
                 {
                     Console.WriteLine("Hai inserito il codice corretto! Gli abitanti sono stati liberati e ti hanno ricompensato con un Fiore di fuoco");
-                    fioreDiFuoco++;
+                    quantita[1]++;
                     g = true;
                 }
                 else
@@ -1330,20 +1057,8 @@ namespace ViaggioControBowser
                     Console.WriteLine("Non sei riuscito ad attaccare Rango, ora lui ti ha attaccato e ti ha inflitto " + RangoAttacco + " danni! Premi un tasto per continuare...");
                     Console.ReadLine();
                     Vita -= RangoAttacco;
-                    StatusPersonaggio(Vita, Attacco, personaggi);
+                    StatusPersonaggio(ref Vita, ref Attacco, ref personaggi);
                     Console.WriteLine("La vita di Rango è: " + RangoVita);
-
-                    if (PozioneCura > 0 && Vita <= 4)
-                    {
-                        Console.WriteLine("Vuoi usare una pozione di cura per recuperare 5 punti vita? (si/no)");
-                        string sceltaPozione = Console.ReadLine();
-                        if (sceltaPozione == "si")
-                        {
-                            Vita += 5;
-                            PozioneCura--;
-                            Console.WriteLine("Hai usato una pozione di cura! La tua vita ora è: " + Vita);
-                        }
-                    }
 
                     if (Vita <= 0)
                     {
@@ -1357,20 +1072,8 @@ namespace ViaggioControBowser
                     Console.WriteLine("Sei riuscito ad attaccare Rango, gli hai inflitto " + Attacco + " danni! Premi un tato per continuare...");
                     Console.ReadLine();
                     RangoVita -= Attacco;
-                    StatusPersonaggio(Vita, Attacco, personaggi);
+                    StatusPersonaggio(ref Vita, ref Attacco, ref personaggi);
                     Console.WriteLine("La vita di Rango è: " + RangoVita);
-
-                    if (PozioneCura > 0 && Vita <= 4)
-                    {
-                        Console.WriteLine("Vuoi usare una pozione di cura per recuperare 5 punti vita? (si/no)");
-                        string sceltaPozione = Console.ReadLine();
-                        if (sceltaPozione == "si")
-                        {
-                            Vita += 5;
-                            PozioneCura--;
-                            Console.WriteLine("Hai usato una pozione di cura! La tua vita ora è: " + Vita);
-                        }
-                    }
 
                     if (Vita <= 0)
                     {
@@ -1379,12 +1082,13 @@ namespace ViaggioControBowser
                     }
                 }
             }
-            Console.WriteLine("Dopo un lungo e arduo combattimento, riesci a sconfiggere Rango! Con la sua sconfitta, ottieni le lune di energia necessarie per potenziare la Odissey. Ora puoi continuare il tuo viaggio e andare verso la fortezza di Bowser.");
+            Console.WriteLine("Dopo un lungo e arduo combattimento, riesci a sconfiggere Rango! Con la sua sconfitta, ottieni le lune di energia necessarie per potenziare la Odissey. Ora puoi continuare il tuo viaggio e andare verso la fortezza di Bowser. Hai ottenuto un SUPER FUNGO");
+            quantita[2]++;
         }
-        static void BowserKingdom(string personaggi, int Vita, int Attacco, int PozioneCura, int fioreDiFuoco, int cavalcatura)
+        static void BowserKingdom(ref string personaggi, ref int Vita, ref int Attacco)// Bowser Kingdom e scontro con Bowser
         {
             Random rand = new Random();
-            int BowserVita = 15, BowserAttacco = 3;
+            int BowserVita = 30, BowserAttacco = 7;
 
             Console.WriteLine("L'Odyssey atterra." + personaggi + "si ritrova immerso in un paesaggio nebbioso dominato da imponenti strutture in stile orientale, fatte di pietra scura e solcate da ponti di legno. L'atmosfera è tesa, ma lo sguardo di Mario è catturato da ciò che si staglia contro il cielo plumbeo: il vasto e minaccioso castello feudale di Bowser.");
             Console.WriteLine("Con determinazione," + personaggi + "si avventura attraverso il regno di Bowser, affrontando trappole insidiose e nemici agguerriti. La sua missione è chiara: infiltrarsi nel castello di Bowser, sconfiggere il malvagio re dei Koopa e salvare la Principessa Peach una volta per tutte.");
@@ -1422,23 +1126,6 @@ namespace ViaggioControBowser
             Console.WriteLine("<< INIZIO BATTAGLIA >>");
             Console.WriteLine("--------------------------------------------------");
 
-            InventarioPersonaggio(PozioneCura, cavalcatura, fioreDiFuoco);
-
-            if (fioreDiFuoco > 0)
-            {
-                Console.WriteLine("Usi il fiore di fuoco per infliggere 2 danni in più a Bowser? (si/no)");
-                string sceltaFiore = Console.ReadLine();
-                if (sceltaFiore == "si")
-                {
-                    Console.WriteLine("Hai usato il fiore di fuoco! Hai inflitto 2 danni in più a Bowser!");
-                    Attacco = Attacco + 2;
-                }
-                else
-                {
-                    Console.WriteLine("Non hai usato il fiore di fuoco.");
-                }
-            }
-
             while (BowserVita > 0)
             {
                 int TiroDado = rand.Next(1, 7);
@@ -1449,20 +1136,8 @@ namespace ViaggioControBowser
                     Console.WriteLine("Non sei riuscito ad attaccare Bowser, ora lui ti ha attaccato e ti ha inflitto " + BowserAttacco + " danni! Premi un tasto per continuare...");
                     Console.ReadLine();
                     Vita -= BowserAttacco;
-                    StatusPersonaggio(Vita, Attacco, personaggi);
+                    StatusPersonaggio(ref Vita, ref Attacco, ref personaggi);
                     Console.WriteLine("La vita di Bowser è: " + BowserVita);
-
-                    if (PozioneCura > 0 && Vita <= 4)
-                    {
-                        Console.WriteLine("Vuoi usare una pozione di cura per recuperare 5 punti vita? (si/no)");
-                        string sceltaPozione = Console.ReadLine();
-                        if (sceltaPozione == "si")
-                        {
-                            Vita += 5;
-                            PozioneCura--;
-                            Console.WriteLine("Hai usato una pozione di cura! La tua vita ora è: " + Vita);
-                        }
-                    }
 
                     if (Vita <= 0)
                     {
@@ -1476,20 +1151,8 @@ namespace ViaggioControBowser
                     Console.WriteLine("Sei riuscito ad attaccare Bowser, gli hai inflitto " + Attacco + " danni! Premi un tato per continuare...");
                     Console.ReadLine();
                     BowserVita -= Attacco;
-                    StatusPersonaggio(Vita, Attacco, personaggi);
+                    StatusPersonaggio(ref Vita, ref Attacco, ref personaggi);
                     Console.WriteLine("La vita di Bowser è: " + BowserVita);
-
-                    if (PozioneCura > 0 && Vita <= 4)
-                    {
-                        Console.WriteLine("Vuoi usare una pozione di cura per recuperare 5 punti vita? (si/no)");
-                        string sceltaPozione = Console.ReadLine();
-                        if (sceltaPozione == "si")
-                        {
-                            Vita += 5;
-                            PozioneCura--;
-                            Console.WriteLine("Hai usato una pozione di cura! La tua vita ora è: " + Vita);
-                        }
-                    }
 
                     if (Vita <= 0)
                     {
@@ -1500,19 +1163,55 @@ namespace ViaggioControBowser
             }
             Console.WriteLine("Evvai! Missione compiuta! Sapevo che ce l'avremmo fatta! Questa volta Bowser ha davvero esagerato, ma alla fine il vero amore vince sempre, non è vero, Principessa? Ora torniamo a casa, è ora di una meritatissima festa nel Regno dei Funghi!");
         }
-        static void EventoCasuale(int PozioneCura, string personaggi, int Vita, int Attacco, int fioreDiFuoco, int cavalcatura)
+        static void ViaggioPeach(ref string personaggi)//Finale con Peach
+        {
+            Console.WriteLine("Peach: Finalmente! È stata un'avventura davvero... intensa, non trovi," + personaggi + "?");
+            Console.WriteLine(personaggi + ": Mamma mia! Intensa è dire poco, Principessa! Bowser si era davvero superato questa volta.");
+            Console.WriteLine();
+            Console.WriteLine(personaggi + ": Ma l'importante è che tu sia al sicuro e che il Regno sia salvo.");
+            Console.WriteLine("Peach: E lo è, grazie a te, ancora una volta. Non so davvero come potrei mai ripagarti per tutto quello che fai.");
+            Console.WriteLine();
+            Console.WriteLine("Peach: Ogni volta che Bowser mi rapisce... beh, tu sei sempre lì.");
+            Console.WriteLine(personaggi + ": È il mio lavoro, Principessa. E poi... non potrei mai lasciare che ti succeda qualcosa.");
+            Console.WriteLine();
+            Console.WriteLine("Peach: Sai, a volte mi chiedo perché Bowser insista tanto. Non si stanca mai di essere sconfitto?");
+            Console.WriteLine(personaggi + ": Forse ha bisogno di un hobby. O di una fidanzata. Magari se trovasse qualcuno, smetterebbe di perseguitare te.");
+            Console.WriteLine();
+            Console.WriteLine("Peach: Un'idea interessante, " + personaggi + ". Ma dubito che chiunque possa gestire un carattere come il suo.");
+            Console.WriteLine("Peach: Comunque, sono così felice di tornare a casa. Immagino che il castello sarà un po' sottosopra dopo tutta la confusione.");
+            Console.WriteLine();
+            Console.WriteLine(personaggi + ": Non ti preoccupare, Principessa. Sono sicuro che i Toad avranno già iniziato a sistemare tutto.");
+            Console.WriteLine(personaggi + ": Sono molto efficienti quando non sono impauriti a morte.");
+            Console.WriteLine();
+            Console.WriteLine("Peach: È vero. E a proposito, dovrò organizzare un banchetto in tuo onore!");
+            Console.WriteLine("Peach: Con tutti i tuoi piatti preferiti, ovviamente.");
+            Console.WriteLine();
+            Console.WriteLine(personaggi + ": Banchetto? Con la tua torta, Principessa?");
+            Console.WriteLine("Peach: Certo che sì! E funghi, tanti funghi! E spaghetti!");
+            Console.WriteLine();
+            Console.WriteLine(personaggi + ": Yahoo! Questo sì che è un premio!");
+            Console.WriteLine("Peach: Te lo meriti," + personaggi + ". Ti meriti tutto. Sei il più coraggioso, il più forte... e il più dolce.");
+            Console.WriteLine();
+            Console.WriteLine(personaggi + ": Beh... grazie, Principessa. Anche tu sei la più... la più... la più gentile.");
+            Console.WriteLine("Peach: Non vedo l'ora di fare un bel bagno caldo e indossare un abito pulito. E tu dovresti fare lo stesso, " + personaggi + ". Sembri uscito da una ciminiera!");
+            Console.WriteLine();
+            Console.WriteLine(personaggi + ": Ottima idea. Ma prima... un piccolo riposino sul tuo divano? Anche solo cinque minuti?");
+            Console.WriteLine("Peach: Certo, " + personaggi + ". Tutto quello che vuoi. Sei l'eroe del Regno, dopotutto.");
+            Console.WriteLine();
+        }
+        static void EventoCasuale(ref string personaggi, ref int Vita, ref int Attacco, ref int[] quantita)
         {
             Random rand = new Random();
             int evento = rand.Next(1, 101);
 
-            int MostroVita = 6, MostroAttacco = 1;
-            if (evento <= 30)
+            int MostroVita = 15, MostroAttacco = 2;
+            if (evento <= 30)//incontro alieni
             {
                 Console.WriteLine("Durante il viaggio," + personaggi + " incontra un gruppo di alieni amichevoli che gli offrono una pozione di cura come segno di amicizia.");
-                PozioneCura++;
+                quantita[0]++;
                 Console.ReadLine();
             }
-            else if (evento > 30 && evento <= 60)
+            else if (evento > 30 && evento <= 60)//incontro mostro
             {
                 Console.WriteLine(personaggi + " incontra un feroce mostro che lo vuole attaccare, non ha via di fuga quindi bisogna combattere.!");
                 while (MostroVita > 0)
@@ -1525,20 +1224,8 @@ namespace ViaggioControBowser
                         Console.WriteLine("Non sei riuscito ad attaccare il mostro, ora lui ti ha attaccato e ti ha inflitto " + MostroAttacco + " danni! Premi un tasto per continuare...");
                         Console.ReadLine();
                         Vita -= MostroAttacco;
-                        StatusPersonaggio(Vita, Attacco, personaggi);
+                        StatusPersonaggio(ref Vita, ref Attacco, ref personaggi);
                         Console.WriteLine("La vita di mostro è: " + MostroVita);
-
-                        if (PozioneCura > 0 && Vita <= 4)
-                        {
-                            Console.WriteLine("Vuoi usare una pozione di cura per recuperare 5 punti vita? (si/no)");
-                            string sceltaPozione = Console.ReadLine();
-                            if (sceltaPozione == "si")
-                            {
-                                Vita += 5;
-                                PozioneCura--;
-                                Console.WriteLine("Hai usato una pozione di cura! La tua vita ora è: " + Vita);
-                            }
-                        }
 
                         if (Vita <= 0)
                         {
@@ -1552,20 +1239,8 @@ namespace ViaggioControBowser
                         Console.WriteLine("Sei riuscito ad attaccare il mostro, gli hai inflitto " + Attacco + " danni! Premi un tato per continuare...");
                         Console.ReadLine();
                         MostroVita -= Attacco;
-                        StatusPersonaggio(Vita, Attacco, personaggi);
+                        StatusPersonaggio(ref Vita, ref Attacco, ref personaggi);
                         Console.WriteLine("La vita del mostro è: " + MostroVita);
-
-                        if (PozioneCura > 0 && Vita <= 4)
-                        {
-                            Console.WriteLine("Vuoi usare una pozione di cura per recuperare 5 punti vita? (si/no)");
-                            string sceltaPozione = Console.ReadLine();
-                            if (sceltaPozione == "si")
-                            {
-                                Vita += 5;
-                                PozioneCura--;
-                                Console.WriteLine("Hai usato una pozione di cura! La tua vita ora è: " + Vita);
-                            }
-                        }
 
                         if (Vita <= 0)
                         {
@@ -1575,79 +1250,114 @@ namespace ViaggioControBowser
                     }
                 }
             }
-            else if (evento > 60 && evento <= 85)
+            else if (evento > 60 && evento <= 85)//incontro toad
             {
-                Console.WriteLine("Incontri toad che in cambio di una vita lui ti dà un pezzo di cavalcatura. Accetti? (si/no)");
+                Console.WriteLine("Incontri toad che in cambio di 5 vite lui ti dà 2 fiori di fuoco. Accetti? (si/no)");
                 string sceltaToad = Console.ReadLine();
                 if (sceltaToad == "si")
                 {
-                    Vita--;
-                    cavalcatura++;
-                    Console.WriteLine("Hai accettato lo scambio con toad! La tua vita ora è: " + Vita + " e il numero di cavalcature è: " + cavalcatura);
+                    Vita = Vita - 5;
+                    quantita[1] = quantita[1] + 2;
+                    Console.WriteLine("Hai accettato lo scambio con toad! La tua vita ora è: " + Vita + " e il tuo inventario è:");
                 }
                 else
                 {
                     Console.WriteLine("Hai rifiutato lo scambio con toad, continui il tuo viaggio.");
                 }
             }
-            else if (evento > 85)
+            else if (evento > 85)//incontro mercante spaziale
             {
-                Console.WriteLine("Mario si imbatte in un mercante spaziale che viene dalla terra di Fossiladia, egli dà come ricompensa a mario un FioreDiFuoco per averla liberata da MadameBroode.");
-                fioreDiFuoco++;
+                Console.WriteLine("Mario si imbatte in un mercante spaziale che viene dalla terra di Fossiladia, egli dà come ricompensa a " + personaggi + " un FioreDiFuoco per averla liberata da MadameBroode.");
+                quantita[2]++;
             }
         }
-        static void Viaggio(string[] Mappa)//descrizioni viaggio
+        static void Viaggio(ref string[] Mappa, ref int i)//descrizioni viaggio in fila
         {
 
-             if (Mappa[1] == "viaggio")
-             {
+            if (i == 1)
+            {
                 Console.WriteLine("Mario dall'oblò della sua Odissey vede allontanarsi una terra preistorica, dove un'enorme cascata ruggisce su piattaforme rocciose e dove i resti fossilizzati di un T-Rex gigantesco giacciono tra l'erba. La terra è primitiva, ma allo stesso tempo rigogliosa e vivace.");
-             }
-             else if (Mappa[2] == "viaggio")
-             {
+            }
+            else if (i == 2)
+            {
                 Console.WriteLine("Dall’oblò della Odyssey, Mario osserva i regni trasformarsi in un mosaico di colori vibranti che fluttuano nel vuoto. Mentre la nave accelera, le scie dorate delle Power Moons illuminano il cielo, facendo sfumare i deserti infuocati nei ghiacciai azzurri e nelle foreste meccaniche. È un istante di quiete magica, sospeso tra il ricordo delle avventure appena vissute e il profilo di un nuovo, misterioso orizzonte che inizia a delinearsi tra le nuvole.");
-             }
-             else if (Mappa[3] == "Viaggio")
-             {
+            }
+            else if (i == 3)
+            {
                 Console.WriteLine("Dall’oblò della Odyssey, Mario osserva le colossali travi di ferro rosso del Bosco Silenzioso emergere tra la nebbia fitta e i rami millenari. Mentre la nave scende di quota, la vegetazione selvaggia avvolge le vecchie macchine arrugginite, creando un contrasto unico tra natura e tecnologia. È un atterraggio suggestivo, accompagnato dal ronzio dei robot giardinieri che guardano insù, pronti ad accoglierlo nel cuore verde e meccanico del regno.");
-             }
-             else if (Mappa[5] == "viaggio")
-             {
-                Console.WriteLine("L'Odyssey si alza in volo. Mario osserva il Regno Bosco Solitario che si trasforma rapidamente in un intricato tappeto. Vede il forte contrasto tra il verde brillante delle fitte foreste di alberi squadrati e il grigio-acciaio delle strutture meccaniche. Le torri sottili dei Legnamici e le vene metalliche dei ponti aerei si rimpiccioliscono, fondendosi in un unico, sorprendente mosaico di natura ed ingegneria. Il lago scuro e le cime rocciose, dove riposa il Boss Robo-Pianta, scompaiono nella nebbia mentre l'Odyssey punta al prossimo orizzonte.");
-             }
-             else if (Mappa[6] == "viaggio")
-             {
+            }
+            else if (i == 6)
+            {
                 Console.WriteLine("Dall’oblò della Odyssey, Mario osserva le imponenti travi di ferro rosso del Regno della Selva emergere tra le fronde dei pini giganti. Mentre la nave scende di quota, il riflesso delle Power Moons scintilla sui macchinari coperti di muschio, mescolando il vapore delle vecchie fabbriche con l'aria fresca e carica di ossigeno del sottobosco. È un momento di pura meraviglia, sospeso tra la maestosità della natura e il profilo del Bosco Silenzioso che si svela, misterioso e antico, sotto i suoi piedi.");
-             }
-             else if (Mappa[8] == "viaggio")
-             {
+            }
+            else if (i == 8)
+            {
                 Console.WriteLine("Dopo una piccola ma brutta pausa la odissey torna a volare verso il prossimo mondo. Dall’oblò della Odyssey, Mario osserva le vette dei grattacieli di New Donk City emergere come giganti d'acciaio tra la nebbia e le nuvole. Mentre la nave scende, il riflesso dorato delle Power Moons danza sulle finestre illuminate e sulle insegne al neon, accendendo il grigio del cemento con una luce elettrica e vibrante. È un istante di pura eccitazione urbana, sospeso tra il silenzio del cielo e il battito frenetico della metropoli che lo attende, tra strade affollate e il ritmo del jazz che si sente già in lontananza.");
-             }
-             else if (Mappa[10] == "viaggio")
-             {
+            }
+            else if (i == 10)
+            {
                 Console.WriteLine("Dall’oblò della Odyssey, Mario osserva le luci scintillanti di New Donk City farsi sempre più piccole mentre la metropoli scompare sotto un tappeto di nuvole. I profili d'acciaio dei grattacieli e le strade animate sfumano in un riflesso dorato, mentre l'eco del festival appena concluso lascia spazio al silenzio del cielo infinito. È un istante di dolce nostalgia, sospeso tra il calore della città appena salvata e il richiamo di un nuovo orizzonte che già brilla nel buio profondo dello spazio.");
-             }
-             else if (Mappa[11] == "viaggio")
-             {
+            }
+            else if (i == 11)
+            {
                 Console.WriteLine("Dall’oblò della Odyssey, Mario osserva le torri di Bruma emergere come isole di ghiaccio tra le nubi soffici e bianche. Mentre la nave scende, il riflesso azzurro delle Power Moons scintilla sui cristalli di ghiaccio e sulle superfici metalliche, creando un gioco di luci che danza con il freddo vento artico. È un momento di pura meraviglia glaciale, sospeso tra la quiete del cielo e il profilo scintillante di Bruma che si svela, misterioso e incantato, sotto i suoi piedi.");
-             }
-             else if (Mappa[13] == "viaggio")
-             {
+            }
+            else if (i == 13)
+            {
                 Console.WriteLine("Dall’oblò della Odyssey, Mario osserva le colline a forma di cappello del Regno di Bruma svanire lentamente tra banchi di nebbia argentea. Le sagome eleganti delle case a cilindro si confondono in un panorama monocromatico, mentre il luccichio delle Power Moons taglia l'atmosfera ovattata con bagliori magici. È un istante di profonda gratitudine, sospeso tra il ricordo del luogo dove tutto è iniziato insieme a Cappy e l’entusiasmo per il viaggio che lo porterà finalmente lontano da quel mondo di spettri e di vento.");
-             }
-             else if (Mappa[15] == "viaggio")
-             {
+            }
+            else if (i == 15)
+            {
                 Console.WriteLine("Dall’oblò della Odyssey, Mario osserva le rovine spettrali di Tirannia svanire tra i lampi violacei e i pesanti banchi di nubi oscure. La sagoma della torre distrutta e il ricordo del drago leggendario si rimpiccioliscono, mentre il bagliore delle Power Moons squarcia l'atmosfera elettrica di quel regno dimenticato. È un istante di sollievo e mistero, sospeso tra l'oscurità di quelle terre tormentate e la luce di un nuovo orizzonte che già promette pace e colori ritrovati.");
-             }
-             else if (Mappa[16] == "viaggio")
-             {
+            }
+            else if (i == 16)
+            {
                 Console.WriteLine("Dall’oblò della Odyssey, Mario osserva l'infinito trasformarsi in un flusso ipnotico di colori e polvere di stelle. Mentre la nave corre veloce, le scie dorate delle Power Moons illuminano il vuoto, fondendo i ricordi dei regni visitati in un unico, vibrante caleidoscopio di luce che danza sul vetro. È un istante di pace sospesa, in cui il silenzio del viaggio lo separa dalle fatiche passate e lo prepara allo stupore di un nuovo, incredibile orizzonte che sta già iniziando a brillare tra le nuvole cosmiche.");
-             }
-             else if (Mappa[17] == "viaggio")
-             {
+            }
+            else if (i == 17)
+            {
                 Console.WriteLine("Dall’oblò della Odyssey, Mario osserva le costellazioni sfrecciare via come linee di luce, mentre la nave punta dritta verso il bagliore minaccioso del covo di Bowser. Il riflesso dorato delle ultime Power Moons raccolte illumina il suo sguardo serio e determinato, che già scruta l'orizzonte in cerca della sagoma del galeone nemico. È un istante di solenne concentrazione, sospeso tra la quiete del vuoto siderale e l'adrenalina per la battaglia finale che deciderà, una volta per tutte, il destino della Principessa Peach.");
-             }
-            
+            }
+
+        }
+        static void Storia(ref int i, ref string personaggi, ref int Vita, ref int Attacco, ref string[] Mappa, ref int[] quantita)//Storia tutta in fila
+        {
+            if (i == 0)
+            {
+                Fossilandia(ref personaggi, ref Vita, ref Attacco, ref Mappa, ref quantita);
+            }
+            else if (i == 4)
+            {
+                BoscoSolitario(ref personaggi, ref Vita, ref Attacco, ref quantita);
+            }
+            else if (i == 5 || i == 10 || i == 18)
+            {
+                EventoCasuale(ref personaggi, ref Vita, ref Attacco, ref quantita);
+            }
+            else if (i == 7)
+            {
+                Imprevisto(ref Vita, ref Attacco, ref personaggi, ref quantita);
+            }
+            else if (i == 9)
+            {
+                NewDonkCity(ref personaggi, ref Vita, ref Attacco, ref quantita);
+            }
+            else if (i == 12)
+            {
+                Bruma(ref personaggi, ref Vita, ref Attacco, ref quantita);
+            }
+            else if (i == 14)
+            {
+                Tirannia(ref personaggi, ref Vita, ref Attacco, ref quantita);
+            }
+            else if (i == 19)
+            {
+                BowserKingdom(ref personaggi, ref Vita, ref Attacco);
+            }
+            else if (i == 20)
+            {
+                ViaggioPeach(ref personaggi);
+            }
         }
         static void Main(string[] args)
         {
@@ -1655,29 +1365,31 @@ namespace ViaggioControBowser
             int Vita = 0, Attacco = 0, cavalcatura = 0, fioreDiFuoco = 1, PozioneCura = 2;
 
             string p = Personaggi(ref Vita, ref Attacco);
+            int[] q = InventarioPersonaggio();
 
-            for (int i = 0; i < Mappa.Length; i++)
+            for (int i = 0; i < Mappa.Length;)
             {
-                int Scelta = TurnoDiGioco(Vita, Attacco, p, PozioneCura, cavalcatura, fioreDiFuoco, Mappa);
-                if(Scelta == 1)
+                int Scelta = TurnoDiGioco(ref Vita, ref Attacco, ref p, ref PozioneCura, ref cavalcatura, ref fioreDiFuoco, ref Mappa);
+                if (Scelta == 1)
                 {
+                    Viaggio(ref Mappa, ref i);
+                    Storia(ref i, ref p, ref Vita, ref Attacco, ref Mappa, ref q);
                     i++;
-                    Viaggio(Mappa);
                 }
                 else if (Scelta == 2)
                 {
                     Console.WriteLine("Hai scelto di mostrare lo status di Mario");
-                    StatusPersonaggio(Vita, Attacco, p);
+                    StatusPersonaggio(ref Vita, ref Attacco, ref p);
                 }
                 else if (Scelta == 3)
                 {
                     Console.WriteLine("Hai scelto di mostrare l'inventario di Mario");
-                    InventarioPersonaggio(PozioneCura, cavalcatura, fioreDiFuoco);
+                    InventarioPersonaggio();
                 }
                 else if (Scelta == 4)
                 {
                     Console.WriteLine("Hai scelto di usare un oggetto");
-                    UsaOggetto(PozioneCura, Vita, Attacco, fioreDiFuoco, cavalcatura);
+                    UsaOggetto(ref q, ref Vita, ref Attacco);
                 }
                 else if (Scelta == 5)
                 {

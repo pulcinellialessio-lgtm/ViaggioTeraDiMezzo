@@ -47,7 +47,7 @@ namespace ViaggioControBowser
 
             return personaggi;
         }
-        static int TurnoDiGioco(ref int Vita, ref int Attacco, ref string personaggi, ref int PozioneCura, ref int cavalcatura, ref int fioreDiFuoco, ref string[] Mappa) //Menu delle azioni
+        static int TurnoDiGioco(ref int Vita, ref int Attacco, ref string personaggi, ref string[] Mappa) //Menu delle azioni
         {
             Console.WriteLine(" -------------------------------------");
             Console.WriteLine("|   Cosa vuoi fare?                   |");
@@ -1362,14 +1362,14 @@ namespace ViaggioControBowser
         static void Main(string[] args)
         {
             string[] Mappa = { "Fossilandia", "viaggio", "viaggio", "viaggio", "Bosco solitario", "EventoCasuale", "viaggio", "Imprevisto", "Viaggio", "New Dowk city", "EventoCasuale", "Viaggio", "Bruma", "viaggio", "Tirannia", "viaggio", "viaggio", "viaggio", "EventoCasuale", "Bowser's Kingdom", "Viaggio con Peach" };
-            int Vita = 0, Attacco = 0, cavalcatura = 0, fioreDiFuoco = 1, PozioneCura = 2;
+            int Vita = 0, Attacco = 0;
 
             string p = Personaggi(ref Vita, ref Attacco);
             int[] q = InventarioPersonaggio();
 
             for (int i = 0; i < Mappa.Length;)
             {
-                int Scelta = TurnoDiGioco(ref Vita, ref Attacco, ref p, ref PozioneCura, ref cavalcatura, ref fioreDiFuoco, ref Mappa);
+                int Scelta = TurnoDiGioco(ref Vita, ref Attacco, ref p, ref Mappa);
                 if (Scelta == 1)
                 {
                     Viaggio(ref Mappa, ref i);

@@ -30,13 +30,13 @@ namespace ViaggioControBowser
 
             string personaggi = Console.ReadLine();
 
-            if (personaggi == "Mario")
+            if (personaggi == "Mario")//scelta mario
             {
                 Vita = 50;
                 Attacco = 5;
                 Console.WriteLine("Hai scelto Mario come protagonista!");
             }
-            else if (personaggi == "Luigi")
+            else if (personaggi == "Luigi")//scelta luigi
             {
                 Vita = 40;
                 Attacco = 8;
@@ -648,17 +648,17 @@ namespace ViaggioControBowser
             Random rand = new Random();
             int TiroDadoStealt = rand.Next(1, 101);
 
-            if (TiroDadoStealt > 75)
+            if (TiroDadoStealt > 75)//stealt
             {
                 Console.WriteLine("Valore tiro dado stealt: " + TiroDadoStealt);
                 Console.WriteLine("Sei riuscito a prendere il pezzo della odissey senza farti vedere dal T-REX! Ora prosegui nella ricerca degli altri pezzi.");
             }
-            else
+            else//stealt fallito
             {
                 Console.WriteLine("Valore tiro dado stealt: " + TiroDadoStealt);
                 Console.WriteLine("Non sei riuscito a prendere il pezzo della odissey senza farti vedere dal T-REX, ora dovrai affrontarlo in un duello per riuscire a prendere il pezzo della odissey.");
 
-                while (TREXVita > 0)
+                while (TREXVita > 0)//combattimento T-REX
                 {
                     int TiroDado = rand.Next(1, 7);
 
@@ -699,7 +699,7 @@ namespace ViaggioControBowser
             Console.ReadLine();
             Console.WriteLine("Un'altro pezzo viene custodito da un gruppo di piranha meccaniche, dovrai combattere e sudare per prendere questo pezzo.");
 
-            while (PiranhaVita > 0)
+            while (PiranhaVita > 0)//combattimento Piranha
             {
                 int TiroDado = rand.Next(1, 7);
 
@@ -748,7 +748,7 @@ namespace ViaggioControBowser
             Console.WriteLine("Esplorando la citta ti imbatti con donkey Kong che ti sfida in una gara di salto sui tetti per dimostrare la tua abilità e ottenere una delle lune di energia necessarie per potenziare la Odissey. Accetti la sfida e ti prepari a saltare da un tetto all'altro, cercando di evitare ostacoli (1) oppure ti concentri a trovare le tre lune (2)?.");
             int scelta = Convert.ToInt32(Console.ReadLine());
 
-            if (scelta == 1)
+            if (scelta == 1)//sfida Domkey Kong
             {
                 Random rand1 = new Random();
 
@@ -775,7 +775,7 @@ namespace ViaggioControBowser
                 Console.WriteLine("Visto che hai vinto Donkey Kong ti dà un'indizio su dove trovare le altre lune, si trovano in cima all'Empire state building.");
                 quantita[0]++;
             }
-            else if (scelta == 2)
+            else if (scelta == 2)//scelta Donkey Kong rifiutata
             {
                 Console.WriteLine("Hai deciso di concentrarti a trovare le tre lune!");
             }
@@ -783,7 +783,7 @@ namespace ViaggioControBowser
             Console.WriteLine("Mentre esplori la città, noti l'Empire State Building che si erge maestoso tra gli altri grattacieli. Decidi di salire in cima per cercare le lune di energia.");
             Console.WriteLine("Appena arrivato vedi subito le tre lune di energia, ma vieni respinto da Hariet, l'unico membro femminile del quartetto, usa bombe pirotecniche e indossa un abito rosa. Sconfiggila e prenditi le lune.");
 
-            while (HarietVita > 0)
+            while (HarietVita > 0)//Hariet
             {
                 int TiroDado = rand.Next(1, 7);
 
@@ -833,7 +833,7 @@ namespace ViaggioControBowser
             Console.WriteLine("Lungo il tragitto incontri Robotanico Tossico, Un grande robot che pattuglia le aree industriali. Attacca rilasciando nebbia pressurizzata, creando campi elettrici. Sei circondato di nebbia ma riesci a trovare una via di fuga. Cosa scegli di fare, combatti (1) oppure tenti di fuggire (2)");
             string scelta = Console.ReadLine();
 
-            if (scelta == "1")
+            if (scelta == "1")//combatimento Robotanico Tossico
             {
                 Console.WriteLine("Hai deciso di affrontare RobotanicoTossico!");
 
@@ -947,7 +947,7 @@ namespace ViaggioControBowser
 
             Console.WriteLine("Il combattimento è iniziato!");
 
-            while (SpewartVita > 0)
+            while (SpewartVita > 0)//Spewart
             {
                 int TiroDado = rand.Next(1, 7);
 
@@ -994,7 +994,7 @@ namespace ViaggioControBowser
 
             Random rand = new Random();
 
-            while (GoombaVita > 0)
+            while (GoombaVita > 0)//Goomba proteggono la gabbia
             {
                 int TiroDado = rand.Next(1, 7);
                 if (TiroDado < 3)
@@ -1050,7 +1050,7 @@ namespace ViaggioControBowser
             Console.WriteLine("Il combattimento è iniziato!");
             Console.ReadLine();
 
-            while (RangoVita > 0)
+            while (RangoVita > 0)//Rango
             {
                 int TiroDado = rand.Next(1, 7);
 
@@ -1129,7 +1129,7 @@ namespace ViaggioControBowser
             Console.WriteLine("<< INIZIO BATTAGLIA >>");
             Console.WriteLine("--------------------------------------------------");
 
-            while (BowserVita > 0)
+            while (BowserVita > 0)//Bowser
             {
                 int TiroDado = rand.Next(1, 7);
 

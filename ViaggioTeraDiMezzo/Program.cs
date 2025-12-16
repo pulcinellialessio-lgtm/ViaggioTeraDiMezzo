@@ -10,21 +10,23 @@ namespace ViaggioControBowser
         {
             Console.WriteLine("SUPER MARIO ODYSSEY");
 
-            Console.WriteLine("Bowser:Troppo tardi," + personaggi + "Ti ho battuto sul tempo! Non importa quanti salti e capriole fai, non potrai mai raggiungere questo aereo.\r\n\r\n" + personaggi + ":Bowser! Lascia andare Peach, immediatamente! La tua pazzia deve finire!\r\n\r\nPeach:" + personaggi + ", non preoccuparti per me! Lui ha barato!\r\n\r\nBowser: Barato? Io la chiamo preparazione meticolosa, cara Principessa. E questa volta, non è un rapimento come gli altri. Questo è... un matrimonio!\r\n\r\n" + personaggi + ": Mamma mia! Un... un cappello da sposa?!\r\n\r\nBowser: Esatto! Ho radunato gli oggetti più sfarzosi e i cuochi migliori dell'intero universo per rendere questo il matrimonio più grandioso che il Regno dei Funghi non vedrà mai! E tu, insignificante idraulico, sei in prima fila... come spettatore della mia vittoria!\r\n\r\n" + personaggi + ": Non accadrà mai! Io ti fermerò! (" + personaggi + " si lancia verso Bowser, ma una barriera di fuoco Koopa lo respinge.)\r\n\r\nBowser: Ah ah ah! Sei stanco e senza forze. E, cosa più importante... sei senza cappello! Senza il tuo cappello portafortuna, sei solo un tipo baffuto in salopette. Addio, " + personaggi + " Divertiti a guardare le mie nozze da sotto!\r\n\r\n" + personaggi + "Non ho ancora finito, Bowser! Tornerò!");
+            Console.WriteLine("Bowser: Troppo tardi, " + personaggi + ". Ti ho battuto sul tempo! Non importa quanti salti e capriole fai, non potrai mai raggiungere questo aereo.\r\n\r\n" + personaggi + ": Bowser! Lascia andare Peach, immediatamente! La tua pazzia deve finire!\r\n\r\nPeach: " + personaggi + ", non preoccuparti per me! Lui ha barato!\r\n\r\nBowser: Barato? Io la chiamo preparazione meticolosa, cara Principessa. E questa volta, non è un rapimento come gli altri. Questo è... un matrimonio!\r\n\r\n" + personaggi + ": Mamma mia! Un... un cappello da sposa?!\r\n\r\nBowser: Esatto! Ho radunato gli oggetti più sfarzosi e i cuochi migliori dell'intero universo per rendere questo il matrimonio più grandioso che il Regno dei Funghi non vedrà mai! E tu, insignificante idraulico, sei in prima fila... come spettatore della mia vittoria!\r\n\r\n" + personaggi + ": Non accadrà mai! Io ti fermerò! (" + personaggi + " si lancia verso Bowser, ma una barriera di fuoco Koopa lo respinge.)\r\n\r\nBowser: Ah ah ah! Sei stanco e senza forze. E, cosa più importante... sei senza cappello! Senza il tuo cappello portafortuna, sei solo un tipo baffuto in salopette. Addio, " + personaggi + " Divertiti a guardare le mie nozze da sotto!\r\n\r\n" + personaggi + ": Non ho ancora finito, Bowser! Tornerò!");
 
             Console.WriteLine("\r\n\r\n");
 
         }
         static string Personaggi(ref int Vita, ref int Attacco) //Scelta personaggio
         {
-            Console.WriteLine(" ------------------------------------------");
-            Console.WriteLine("| Scegli il potagonista della vicenda:     |");
-            Console.WriteLine("|                                          |");
-            Console.WriteLine("| 1: MARIO.  Punti vita = 10 / Attacco = 2 |");
-            Console.WriteLine("|                                          |");
-            Console.WriteLine("| 2: LUIGI.  Punti vita = 6 / Attaco = 4   |");
-            Console.WriteLine("|                                          |");
-            Console.WriteLine(" ------------------------------------------");
+            Console.WriteLine("SUPER MARIO ODISSEY");
+
+            Console.WriteLine(" --------------------------------------------");
+            Console.WriteLine("| Scegli il potagonista della vicenda:       |");
+            Console.WriteLine("|                                            |");
+            Console.WriteLine("| 1: MARIO.  Punti vita = 50 / Attacco = 5   |");
+            Console.WriteLine("|                                            |");
+            Console.WriteLine("| 2: LUIGI.  Punti vita = 40 / Attacco = 8   |");
+            Console.WriteLine("|                                            |");
+            Console.WriteLine(" --------------------------------------------");
 
             string personaggi = Console.ReadLine();
 
@@ -75,9 +77,10 @@ namespace ViaggioControBowser
             Console.WriteLine("    ");
             for(int i = 0; i < quantita.Length; i++)
             {
+                Console.Write("      ");
                 Console.Write(quantita[i]);
-                Console.Write("                     ");
-            }
+                Console.Write("        ");
+            } 
 
             Console.WriteLine("");
 
